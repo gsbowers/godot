@@ -20,12 +20,15 @@ maxfiletime = 10000
 def lm7_newfirm(all_morpho, sn, seconds):
 
   if sn == 'eRC1488':
-    restartpoint = 0.8*5461
+    max_buffer_frac = 0.25
   if sn == 'eRC1489':
-    restartpoint = 0.8*5461/4
+    max_buffer_frac = 0.35
   if sn == 'eRC1490':
-    restartpoint = 0.8*5461/16
+    max_buffer_frac = 0.50
+  if sn == 'eRC1491':
+    max_buffer_frac = 0.65
 
+  restartpoint = 5461*max_buffer_frac
 
   print "running lm7_newfirm.py"
   print "restartpoint: ", restartpoint
@@ -40,11 +43,12 @@ def lm7_newfirm(all_morpho, sn, seconds):
   finishing=0
   
   while finishing < 1:
-      lm_data_dir = "/home/vladimir/github/godot/bpi/listmode/python/multi/parallel/data/"
-      prefix = "%s"%sn
-      suffix = time.strftime("_lm7_newfirm_%y%m%d_%H%M%S.csv")
-      lm_data_file = lm_data_dir+prefix+suffix
-      #lm_data_file = (time.strftime("/media/david/Seagate Expansion Drive/hawc_data/lm_%y%m%d_%H%M%S.csv"))
+      #lm_data_dir = "/home/vladimir/github/godot/bpi/listmode/python/multi/parallel/data/"
+      #prefix = "%s"%sn
+      #suffix = time.strftime("_lm7_newfirm_%y%m%d_%H%M%S.csv")
+      #lm_data_file = lm_data_dir+prefix+suffix
+
+      lm_data_file = "/home/vladimir/github/godot/bpi/listmode/python/multi/parallel/data/%s%s_%2.0f.csv"%(sn,time.strftime("_lm7_newfirm_%y%m%d_%H%M%S"),max_buffer_frac*100)
   
       #From lm3 we replaced "clear_statistics" with 0 instead of 1
       emorpho_io.start_lm(all_morpho, sn, [0,0])
@@ -117,4 +121,5 @@ def lm7_newfirm(all_morpho, sn, seconds):
       totallength = totallength + length
   
   print time.strftime("%Y-%m-%d/%H:%M:%S", time.localtime())
-  print "List mode done, total length: ",totallength,"  ",totallength/seconds,"c/s"
+  #print "%s List mode done, total length: ",sn, totallength,"  ",totallength/seconds,"c/s"
+  print "%s @ %2.0f%% List mode done, total length: %f  %fc/s"%(sn, max_buffer_frac*100, totallength,totallength/seconds)

@@ -14,16 +14,19 @@ import string
 import numpy
 
 filelength=100000
-restartpoint = 270
+restartpoint = 341 
 maxfiletime = 10000
 
 def lm7(all_morpho, sn, seconds):
+
+  max_buffer_frac = 0.8
+  restartpoint = 341 * max_buffer_frac
 
   print "running lm7.py"
   print "restartpoint: ", restartpoint
   print "maxfiletime: ", maxfiletime
   print time.strftime("%Y-%m-%d/%H:%M:%S", time.localtime())
-  
+
   #assumes detector has already been booted up and configured with
   #setplastic_api.py or setnai_api.py
   
@@ -32,10 +35,12 @@ def lm7(all_morpho, sn, seconds):
   finishing=0
   
   while finishing < 1:
-      lm_data_dir = "/home/vladimir/github/godot/bpi/listmode/python/multi/parallel/data/"
-      prefix = "%s"%sn
-      suffix = time.strftime("_lm7_%y%m%d_%H%M%S.csv")
-      lm_data_file = lm_data_dir+prefix+suffix
+      #lm_data_dir = "/home/vladimir/github/godot/bpi/listmode/python/multi/parallel/data/"
+      #prefix = "%s"%sn
+      #suffix = time.strftime("_lm7_%y%m%d_%H%M%S.csv")
+      #lm_data_file = lm_data_dir+prefix+suffix
+
+      lm_data_file = "/home/vladimir/github/godot/bpi/listmode/python/multi/parallel/data/%s%s"%(sn,time.strftime("_lm7_%y%m%d_%H%M%S.csv"))
   
       #From lm3 we replaced "clear_statistics" with 0 instead of 1
       emorpho_io.start_lm(all_morpho, sn, [0,0])
@@ -106,4 +111,5 @@ def lm7(all_morpho, sn, seconds):
       totallength = totallength + length
   
   print time.strftime("%Y-%m-%d/%H:%M:%S", time.localtime())
-  print "List mode done, total length: ",totallength,"  ",totallength/seconds,"c/s"
+  #print "%s List mode done, total length: ",sn, totallength,"  ",totallength/seconds,"c/s"
+  print "%s @ %2.0f%% List mode done, total length: %f  %fc/s"%(sn, max_buffer_frac*100, totallength,totallength/seconds)
