@@ -6,18 +6,103 @@
 <title>Browser</title>
 	<meta http-equiv="Content-Type" content="text/html;charset=utf-8">
 	<link rel="stylesheet" type="text/css" href="9th.css">
+	<script src="http://yui.yahooapis.com/3.18.1/build/yui/yui-min.js"></script>
+	<script type="text/javascript" src="godot-utils.js"></script>
 </head>
 
-<body>
-	<div id="content">
-		<script type="text/javascript" src="godot-utils.js"></script>
-		<div id="container">	
+<body onload="onload()" vlink="blue" bgcolor="#8DB6CD">
+	<div id="content" class="yui3-skin-sam yui3-g"> 
+		<div id="sidebar" class="yui3-u">
 
-			<div id="quicklook">
-				<img name="plot" alt="plot" src="quicklook/godot_141204.png" style="border:none">
+			<div id="title">
+				<font size="+3"><b><a href="./">Browser 1.0</a></b></font>
+			</div>
+
+			<div id="checkmenu">
+
+				<form onclick="processCheckClick()" name="check">	
+					<label>
+						<input id="check_lgbin" type="checkbox" checked>
+						GODOT Count Rates w/Large bins & JMA hourly rainfall
+					</label>
+
+					<div></div>
+					<label>
+						<input id="check_smbin" type="checkbox"> 
+						GODOT Count Rates w/Small bins & JMA 10min rainfall
+					</label>
+				
+					<hr>
+
+				</form>
+			</div><!--checkmenu-->
+
+			<!-- Container for Yahoo! Calendar interface -->
+			<div id="calendar"></div>
+
+			<div id="controls">
+				<tbody>
+					<tr>
+						<td colspan="3">
+							<a onclick="resetDate(); return false" href="">
+								<img class="control" title="リセット日" src="button-reset.png">
+							</a>
+							<img class="control" usemap="#bday" src="button-day.png">
+							<a id="directURL" href="#" onClick="directURL()">
+								<img class="control" title="参照URL" src="button-direct.png">
+							</a>
+						</td>
+					</tr>
+				</tbody>
+			</div>
+
+			<map name="bday">
+				<area shape="rect" coords="5,0,22,29" title="1日の後方に移動します" href="" onclick="incrementDate(-1); return false">
+				<area shape="rect" coords="37,0,54,29" title="1日の前進" href="" onclick="incrementDate(1); return false">
+			</map>
+
+
+			<hr>
+
+			<div id=links>
+			<b>Links</b><br>
+			<a href="http://www.data.jma.go.jp/obd/stats/etrn/index.php?prec_no=56&block_no=0560" target="_blank">JMA Rainfall Data near Noto</a>
+			</div>
+	
+		</div><!--sidebar-->
+
+
+		<div id="plotarea" class="yui3-u">	
+
+			<div id="lgbin">
+	
+				<img id="plot_lgbin" name="plot_lgbin" alt="" src="" style="border:none" onerror="this.src='./godot_error.png';"/>
+
+				<a onclick="incrementDate(-1); return false" href="">
+					<img id=buttonleft src="button-left.png">
+				</a>
+
+				<a onclick="incrementDate(1); return false" href="">
+					<img id=buttonright src="button-right.png">
+				</a>
+
 			</div> <!--quicklook -->
 
-		</div><!--container-->
+			<div id="smbin"> 
+				<img id="plot_smbin" name="plot_smbin" alt="" src="" style="border:none" onerror="this.src='./godot_error.png';"/>
+
+				<a onclick="incrementDate(-1); return false" href="">
+					<img id=buttonleft src="button-left.png">
+				</a>
+
+				<a onclick="incrementDate(1); return false" href="">
+					<img id=buttonright src="button-right.png">
+				</a>
+
+
+			</div> <!--quicklook -->
+
+		</div><!--plotarea-->
 	</div><!--content-->
 </body>
 

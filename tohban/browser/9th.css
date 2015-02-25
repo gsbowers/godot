@@ -1,0 +1,109 @@
+#content {
+	position: relative;
+	margin: 0px auto 0px auto;
+
+	top: 00px;
+	width: 1050px;
+	height: 1200px;
+
+	background-repeat: no-repeat;
+	/*background-color: #ffffff;*/
+	background-position: bottom;
+
+	text-align: center;
+	onselectstart="return false";
+}
+
+#sidebar{
+	position: relative;
+	width: 300px;
+	margin: 0px auto 0px auto;
+	float: left;
+}
+
+#title{
+	position: relative;
+	margin: 0px auto 0px auto;
+	width: 300px;
+	text-align: left;
+	font-family: serif;
+}
+
+
+#controls{
+	position: relative;
+	width: 300px;
+	margin-top: 10px;
+}
+
+.control{
+	border-style: solid;
+	border-width: 10px;
+	border-color: #8DB6CD;
+}
+
+#checkmenu{
+	position: relative;
+	text-align: left;
+	width: 300px;
+}
+
+#calendar{
+	position: relative;
+	width: 300px;
+}
+
+
+#links{
+	position: relative;
+	text-align:left;
+	font-size: small;
+}
+
+
+#plotarea{
+	position: relative;
+
+	width: 700px;
+	height: 1000px;
+	float: right;
+}
+
+#lgbin{
+	position: relative;
+	margin: 0px auto 0px auto;
+	width: 700px;
+	height: 500px;
+	bottom: 0;
+}
+
+#smbin{
+	position: relative;
+	margin: 0px auto 0px auto;
+	width: 700px;
+	height: 500px;
+	bottom: 0;
+	display: none;
+}
+
+#buttonleft{
+	position: absolute;
+	bottom: 20px;
+	left: 50px;
+}
+
+#buttonright{
+	position: absolute;
+	bottom: 20px;
+	right: 50px;
+}
+
+#header {
+	text-align: center;
+
+	background-color: #ffffff;
+	margin: 0px auto 0px auto;
+	padding-top: 40px; 
+	padding-bottom: 40px;
+	width: inherit; 
+}
