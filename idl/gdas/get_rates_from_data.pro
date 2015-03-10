@@ -50,16 +50,18 @@ for i=0,nframes-1 do begin
 		nmod = n mod nevents
 
 		;distribute remainder events evenly amongst nbins	
-		nevents = nevents+nmod/nbins
-		nmod = nmod - nmod/nbins*nbins
+		nadd = nmod/nbins ;events to add to every bin
+		nmod = nmod - nmod/nbins*nbins ;new remainder
+
+		ntot = nevents+nadd ;total events per bin
 
 		for bin=0, nbins-1 do begin
 			
-			;distribute remainder (of remainder events) into first nmod bins
+			;distribute remainder of remainder events into first nmod bins
 			if nmod gt 0 then $ 
-				select = indgen(nevents+1, /UL64)+bin*(nevents+1) $
+				select = indgen(ntot+1, /UL64)+bin*(ntot+1) $
 			else $
-				select = indgen(nevents, /UL64)+bin*nevents + (n mod nevents)
+				select = indgen(ntot, /UL64)+bin*ntot + (n mod ntot)
 			nmod--
 
 			tbin = t(select)
