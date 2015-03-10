@@ -46,11 +46,6 @@ allfiles = [prevfiles, allfiles]
 ;get files associated with requested decetor
 files = strfilter(allfiles, '*'+detector+'*.csv')
 
-;initialize main data structure
-;rate = {time:double(!VALUES.F_NAN), counts:double(!VALUES.F_NAN), rate:double(!VALUES.F_NAN), dt:double(!VALUES.F_NAN)}   	
-;allrates = replicate(rate, 15000000l)	
-;count = ULONG64(0)	
-
 ;concatenante rates from all files
 allrates = []
 for i=0, n_elements(files)-1 do begin
