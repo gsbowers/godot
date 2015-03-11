@@ -1,24 +1,34 @@
-function get_rates_from_data, data, binsize=binsize, ch=ch, nevents=nevents 
+function get_rates_from_data, data, binsize=binsize, ch=ch, nevents=nevents
 
 ;check that data is structure with 'energy' and 'time' tags
 if ~is_struct(data) then $
-	message, "data expected to be struct with tag names 'energy' & 'time'"
+	message, "data expected to be struct with tag names 'ENERGY','TIME','FRAME', 'GOODFRAMES', 'FILENAME'"
 tagnames = tag_names(data)	
 w = where(tagnames eq 'ENERGY', count)
 if count ne 1 then $
-	message, "data expected to be struct with tag names 'energy' & 'time'"
+	message, "data expected to be struct with tag names 'ENERGY'"
 w = where(tagnames eq 'TIME', count)
 if count ne 1 then $
-	message, "data expected to be struct with tag names 'energy' & 'time'"
+	message, "data expected to be struct with tag names 'TIME'"
+w = where(tagnames eq 'FRAME', count)
+if count ne 1 then $
+	message, "data expected to be struct with tag name 'FRAME'"
+w = where(tagnames eq 'GOODFRAMES', count)
+if count ne 1 then $
+	message, "data expected to be struct with tag name 'GOODFRAMES'"
+w = where(tagnames eq 'FILENAME', count)
+if count ne 1 then $
+	message, "data expected to be struct with tag name 'FILENAME'"
 
 ;check keywords
 if ~keyword_set(ch) then ch = [1,1e4]
 
 ;initialize main data structure
-rate = {time:double(!VALUES.F_NAN), counts:double(!VALUES.F_NAN), rate:double(!VALUES.F_NAN), dt:double(!VALUES.F_NAN)}   	
+rate = {time:double(!VALUES.F_NAN), counts:double(!VALUES.F_NAN), rate:double(!VALUES.F_NAN), dt:double(!VALUES.F_NAN), filename:'', fid:-1}   	
 rates = replicate(rate, 10000000l)	
 count = ULONG64(0)	
 
+;calculate rates within frames 
 nframes = n_elements(data.goodframes)	
 
 for i=0,nframes-1 do begin
@@ -70,6 +80,7 @@ for i=0,nframes-1 do begin
 			rate.counts = n_elements(select)  
 			rate.dt = tbin[-1]-tbin[0]
 			rate.rate = double(rate.counts/rate.dt)
+			rate.filename = data.filename
 
 			rates[count] = rate
 			count++

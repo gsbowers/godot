@@ -11,7 +11,7 @@ head = indgen(nevents*3+2)
 tail = n_elements(lmstr)-reverse(indgen(nevents*3,/UL64)+1)  
 
 if keyword_set(timestamp) and keyword_set(frame) then $ 
-	print, string(format='(%"frame %d: %s\r")', frame, timestamp)
+	print, string(format='(%"frame %2d: %s")', frame, timestamp)
 
 print, [['','',delims]+lmstr[head], '...']
 print, ['...', delims+lmstr[tail]]

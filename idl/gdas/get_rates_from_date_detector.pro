@@ -1,4 +1,4 @@
-function get_rates_from_date_detector, date, detector, ch=ch, nevents=nevents
+function get_rates_from_date_detector, date, detector, ch=ch, nevents=nevents, silent=silent
 ;bdas parameter/alias checking
 
 ;valid detector names
@@ -31,17 +31,7 @@ detector = detector[0] ;only take first detector
 print, 'Requesting ... ', detector
 
 ;load filenames from /media/godot/data for given date
-allfiles=file_search('/media/godot/data/*_'+date+'_*.csv')
-;pull last file from end of previous day for small plastic
-prevfiles = []
-dhour = 1
-while (prevfiles eq !NULL or prevfiles eq '') and (dhour lt 8) do begin
-	prevfiles=file_search('/media/godot/data/eRC1489*'+$
-		time_string(gettime('20'+date)-3600-dhour,$
-			tformat='yyMMDD_hh')+'*.csv')
-	dhour++
-endwhile
-allfiles = [prevfiles, allfiles]
+allfiles = get_data_files(date) 
 
 ;get files associated with requested decetor
 files = strfilter(allfiles, '*'+detector+'*.csv')
@@ -51,9 +41,12 @@ allrates = []
 for i=0, n_elements(files)-1 do begin
 
 	filename = files[i]
-	data = get_data_from_file(filename)
+	data = get_data_from_file(filename, silent=silent)
 	rates = get_rates_from_data(data, ch=ch, nevents=nevents) 
-	
+
+	fid = where(files eq rates[0].filename)
+	rates.fid = fid[0]
+
 	allrates = [allrates, rates]
 
 endfor

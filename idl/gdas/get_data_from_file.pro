@@ -1,4 +1,4 @@
-function get_data_from_file, filename, stopframe=stopframe
+function get_data_from_file, filename, stopframe=stopframe, silent=silent
 
 ;DIAGNOSTIC
 if ~keyword_set(stopframe) then stopframe = -1
@@ -21,12 +21,12 @@ readf, lun, lines
 close, lun
 free_lun, lun
 
-;seperate lines into lmbuffers and timestamps 
-lmbuffers = lines(indgen(nlines/2)*2)
+;seperate lines into lmstrs and timestamps 
+lmstrs = lines(indgen(nlines/2)*2)
 timestamparrays = lines(indgen(nlines/2)*2 + 1) 
 
 ;iterate through frames
-;one frame consists of timestamp + lmbuffer
+;one frame consists of timestamp + lmstr
 started = 0
 nframes = nlines/2
 for frame=1,nframes-1 do begin
@@ -50,18 +50,20 @@ for frame=1,nframes-1 do begin
 	;record timestamp (for all frames)
 	timestamps = [timestamps, timestamp]
 
-	;get lmbuffer data
-	a = strsplit(lmbuffers[frame], ' ', /extract)
-	if n_elements(a) eq 1 then continue ;first lmbuffer always empty
+	;get lmstr data
+	a = strsplit(lmstrs[frame], ' ', /extract)
+	if n_elements(a) eq 1 then continue ;first lmstr always empty
 
 	buffer_size = a[1]*1 
 
 	if started then begin 
-		check = checklmbuffer(a, lasta, frame)
+		check = check_lmstr(a, lasta, frame, silent=silent)
+		;DIAGNOSTIC
+		if frame eq stopframe then stop
 		if check.flag then continue
 	endif
 
-	en = a[indgen(buffer_size)*3+2]*ULONG64(1)
+	en = a[indgen(buffer_size)*3+2]*1l
 	ta = a[indgen(buffer_size)*3+3]*1l
 	tb = a[indgen(buffer_size)*3+4]*1l
 
@@ -71,11 +73,11 @@ for frame=1,nframes-1 do begin
 	for k=0, nskips-1 do $
 		if skips[k]+1 le buffer_size-1 then $
 			tb[skips[k]+1:buffer_size-1] += 65536.d	
-			
+
 	t=ta*1.d + tb*65536.d
 	t*=12.5d-9
 
-	;make last event in lmbuffer occur at timestamp  
+	;make first event in lmstr occur at timestamp  
 	t -= t[0]
 
 	;add initial time to get seconds since start of day
@@ -88,6 +90,9 @@ for frame=1,nframes-1 do begin
 	events[count:count+buffer_size-1].ta = ta
 	events[count:count+buffer_size-1].tb = tb
 	events[count:count+buffer_size-1].frame = frame
+
+	;DIAGNOSTIC
+	if frame eq stopframe then stop
 
 	;record goodframe
 	goodframes = [goodframes, frame]
@@ -113,9 +118,6 @@ for frame=1,nframes-1 do begin
 			message, 'stopping'
 		endif 
 	endif
-
-	;DIAGNOSTIC
-	if frame eq stopframe then stop
 
 	count += buffer_size
 	lastframe_lastevent_time = events[count-1].time
