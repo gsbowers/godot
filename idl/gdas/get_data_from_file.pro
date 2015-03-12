@@ -55,7 +55,7 @@ for frame=1,nframes-1 do begin
 	if n_elements(a) eq 1 then continue ;first lmstr always empty
 
 	buffer_size = a[1]*1 
-
+	
 	if started then begin 
 		check = check_lmstr(a, lasta, frame, silent=silent)
 		;DIAGNOSTIC
@@ -80,10 +80,14 @@ for frame=1,nframes-1 do begin
 	;make first event in lmstr occur at timestamp  
 	t -= t[0]
 
+	;DIAGNOSTIC
+	if frame eq stopframe then stop
+	
+
 	;add initial time to get seconds since start of day
 	;t += hour*3600.0d + minute*60.d + double(second) + micro*1.d-6
 	t += gettime(timestamp)
-	
+
 	;record event data
 	events[count:count+buffer_size-1].energy = en
 	events[count:count+buffer_size-1].time = t

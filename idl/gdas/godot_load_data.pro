@@ -47,6 +47,12 @@ for n=0, n_elements(sn_list)-1 do begin
 	store_data, tname, data={x:time(w), y:rate(w)}
 	options, tname, ysubtitle='[cnts/s]', $
 		charsize=1.8, labels=label, psym=10, xtitle='Time (UTC)'
+
+	;store ancillary data
+	tname = string(format='(%"%s_FID")', description)
+	label = string(format='(%"%s")', 'FILE_ID')
+	store_data, tname, data={x:time(w), y:rates(w).fid}	
+	options, tname, charsize=1.8, labels=label, psym=10, xtitle='Time (UTC)'
 		
 endfor ;for each sn in sn_list
 
