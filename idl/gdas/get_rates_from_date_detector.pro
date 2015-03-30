@@ -31,7 +31,7 @@ detector = detector[0] ;only take first detector
 print, 'Requesting ... ', detector
 
 ;load filenames from /media/godot/data for given date
-allfiles = get_data_files(date) 
+allfiles = get_filenames(date) 
 
 ;get files associated with requested decetor
 files = strfilter(allfiles, '*'+detector+'*.csv')

@@ -1,4 +1,4 @@
-function get_data_files, date, timespan=timespan 
+function get_filenames, date, timespan=timespan 
 
 datadir = '/media/godot_/data/'
 
@@ -9,7 +9,7 @@ prevfiles = []
 dhour = 1
 while (prevfiles eq !NULL or prevfiles eq '') and (dhour lt 8) do begin
 	prevfiles=file_search(datadir+'eRC1489*'+$
-		time_string(gettime('20'+date)-3600-dhour,$
+		time_string(gettime('20'+date)-3600*dhour,$
 			tformat='yyMMDD_hh')+'*.csv')
 	dhour++
 endwhile

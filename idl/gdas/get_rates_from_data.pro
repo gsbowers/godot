@@ -1,4 +1,6 @@
-function get_rates_from_data, data, binsize=binsize, ch=ch, nevents=nevents
+function get_rates_from_data, data, binsize=binsize, ch=ch, nevents=nevents_passedin
+
+;do not modify nevents_passedin
 
 ;check that data is structure with 'energy' and 'time' tags
 if ~is_struct(data) then $
@@ -24,7 +26,7 @@ if count ne 1 then $
 if ~keyword_set(ch) then ch = [1,1e4]
 
 ;initialize main data structure
-rate = {time:double(!VALUES.F_NAN), counts:double(!VALUES.F_NAN), rate:double(!VALUES.F_NAN), dt:double(!VALUES.F_NAN), filename:'', fid:-1}   	
+rate = {time:double(!VALUES.F_NAN), counts:double(!VALUES.F_NAN), rate:double(!VALUES.F_NAN), dt:double(!VALUES.F_NAN), filename:'', fid:-1, flag0:0, flag1:0, flag2:0, flag3:0} 
 rates = replicate(rate, 10000000l)	
 count = ULONG64(0)	
 
@@ -54,6 +56,8 @@ for i=0,nframes-1 do begin
 
 	if keyword_set(nevents) then begin ;fixed number of events
 
+		nevents = nevents_passedin
+
 		if nevents gt n then nevents = n
 
 		nbins = n/nevents
@@ -81,6 +85,17 @@ for i=0,nframes-1 do begin
 			rate.dt = tbin[-1]-tbin[0]
 			rate.rate = double(rate.counts/rate.dt)
 			rate.filename = data.filename
+
+			;get statistics on flagged frames within file
+			f0 = where(data.frameflags.flag0, nf0)
+			f1 = where(data.frameflags.flag1, nf1)
+			f2 = where(data.frameflags.flag2, nf2)
+			f3 = where(data.frameflags.flag3, nf3)
+
+			rate.flag0 = nf0
+			rate.flag1 = nf1
+			rate.flag2 = nf2
+			rate.flag3 = nf3
 
 			rates[count] = rate
 			count++
