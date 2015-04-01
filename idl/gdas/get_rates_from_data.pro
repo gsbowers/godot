@@ -26,7 +26,7 @@ if count ne 1 then $
 if ~keyword_set(ch) then ch = [1,1e4]
 
 ;initialize main data structure
-rate = {time:double(!VALUES.F_NAN), counts:double(!VALUES.F_NAN), rate:double(!VALUES.F_NAN), dt:double(!VALUES.F_NAN), filename:'', fid:-1, flag0:0, flag1:0, flag2:0, flag3:0} 
+rate = {time:double(!VALUES.F_NAN), counts:double(!VALUES.F_NAN), rate:double(!VALUES.F_NAN), dt:double(!VALUES.F_NAN), filename:'', fid:-1, flag0:0, flag1:0, flag2:0}
 rates = replicate(rate, 10000000l)	
 count = ULONG64(0)	
 
@@ -90,12 +90,10 @@ for i=0,nframes-1 do begin
 			f0 = where(data.frameflags.flag0, nf0)
 			f1 = where(data.frameflags.flag1, nf1)
 			f2 = where(data.frameflags.flag2, nf2)
-			f3 = where(data.frameflags.flag3, nf3)
 
 			rate.flag0 = nf0
 			rate.flag1 = nf1
 			rate.flag2 = nf2
-			rate.flag3 = nf3
 
 			rates[count] = rate
 			count++

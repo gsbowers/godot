@@ -83,13 +83,8 @@ for n=0, n_elements(sn_list)-1 do begin
 	store_data, tname2, data={x:time(w), y:rates(w).flag2}
 	options, tname2, charsize=1.8, labels=label, psym=0, xtitle='UTC'
 
-	tname3 = string(format='(%"%s_flag3")', description)
-	label = 'orphan'
-	store_data, tname3, data={x:time(w), y:rates(w).flag3}
-	options, tname3, charsize=1.8, labels=label, psym=0, xtitle='UTC'
-
 	tname = string(format='(%"%s_Flags")', description)
-	store_data, tname, data=[tname0, tname1, tname2, tname3]
+	store_data, tname, data=[tname0, tname1, tname2]
 	options, tname, colors=colors[0:4]
 
 	data = [data, rates]
@@ -102,9 +97,9 @@ if keyword_set(quicklook) then begin
 	tplot, description_list
 	t0 = gettime('20'+date)
 	tlimit, [t0, t0+86400]
-	write_png, './quicklook_plots/godot_'+date+'.png', tvrd(/true)
+	write_png, './quicklook_plots/_godot_'+date+'.png', tvrd(/true)
 endif
 
 ;save data products
-save, data, filename='./savdat/godot_'+date+'.sav', /compress
+save, data, filename='./savdat/_godot_'+date+'.sav', /compress
 end

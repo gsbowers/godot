@@ -37,7 +37,6 @@ jumps = where(dtb gt 100, njumps)
 if njumps gt 0 then begin
 	if ~keyword_set(silent) then $
 		print, string(format='(%"frame %2d: jump in frame")', frame)
-	stop
 	flag = 1; continue
 	reta = -1;
 	return, {flag:flag, a:reta}
