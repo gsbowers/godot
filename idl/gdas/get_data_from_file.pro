@@ -1,7 +1,9 @@
-function get_data_from_file, filename, stopframe=stopframe, silent=silent
+function get_data_from_file, filename, stopframe=stopframe, silent=silent, logfile=logfile
 
 ;DIAGNOSTIC
 if ~keyword_set(stopframe) then stopframe = -1
+
+if ~keyword_set(logfile) then logfile='log.txt'
 
 ;initialize main data structure
 event = {time:double(!VALUES.F_NAN), energy:LONG(0), frame:LONG(64), ta:LONG(0), tb:LONG(0)}
@@ -97,7 +99,7 @@ for frame=1,nframes-1 do begin
 		print, string(format='(%"filename: %s")', filename)
 		print, string(format='(%"in frame %d: time not monotonic")', frame)
 		frameflags[frame].flag2 = 1
-		openw, 20, 'log.txt', /append
+		openw, 20, logfile, /append
 		printf, 20, string(format='(%"filename: %s")', filename)
 		printf, 20, string(format='(%"in frame %d: time not monotonic.")', frame)
 		close, 20
@@ -112,7 +114,7 @@ for frame=1,nframes-1 do begin
 			print, string(format='(%"time across frames not monotonic: at frame %d.")', frame)
 			print, string(format='(%"filename: %s")', filename)
 			frameflags[frame].flag2 = 2
-			openw, 20, 'log.txt', /append
+			openw, 20, logfile, /append
 			printf, 20, string(format='(%"time across frames not monotonic: at frame %d.")', frame)
 			printf, 20, string(format='(%"filename: %s")', filename)
 			close, 20
