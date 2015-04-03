@@ -26,16 +26,16 @@ def lm8_newfirm(all_morpho, sn, seconds):
 
   if sn == 'eRC1488':
     max_buffer_frac = 500/5461.0
-		maxfiletime = 50 
+    maxfiletime = 50 
   if sn == 'eRC1489':
     max_buffer_frac = 0.35
-		maxfiletime = 900
+    maxfiletime = 900
   if sn == 'eRC1490':
     max_buffer_frac = 0.65
-		maxfiletime = 900
+    maxfiletime = 900
   if sn == 'eRC1491':
     max_buffer_frac = 0.50
-		maxfiletime = 900
+    maxfiletime = 900
 
   restartpoint = 5461*max_buffer_frac
 

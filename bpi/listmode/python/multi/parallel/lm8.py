@@ -20,7 +20,7 @@ filelength=100000
 def lm8(all_morpho, sn, seconds):
 
   max_buffer_frac = 10/5461.0
-	maxfiletime = 50
+  maxfiletime = 50
   restartpoint = 341 * max_buffer_frac
 
   print "running lm8.py"
