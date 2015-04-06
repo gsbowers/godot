@@ -16,7 +16,7 @@ endwhile
 
 files = [prevfiles, files]
 
-if keyword_set(filter) then 
+if keyword_set(filter) then $ 
 	files = strfilter(files, filter)
 
 return, files
