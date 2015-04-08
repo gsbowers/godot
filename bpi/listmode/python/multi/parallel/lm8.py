@@ -14,19 +14,16 @@ import string
 import numpy
 
 filelength=100000
-#restartpoint = 341 
-#maxfiletime = 10000
+restartpoint = 100
+maxfiletime = 50
 
 def lm8(all_morpho, sn, seconds):
 
-  max_buffer_frac = 10/5461.0
-  maxfiletime = 50
-  restartpoint = 341 * max_buffer_frac
 
-  print "running lm8.py"
-  print "restartpoint: ", restartpoint
-  print "maxfiletime: ", maxfiletime
-  print time.strftime("%Y-%m-%d/%H:%M:%S", time.localtime())
+  #print "running lm8.py"
+  #print "restartpoint: ", restartpoint
+  #print "maxfiletime: ", maxfiletime
+  #print time.strftime("%Y-%m-%d/%H:%M:%S", time.localtime())
 
   #assumes detector has already been booted up and configured with
   #setplastic_api.py or setnai_api.py
@@ -34,14 +31,12 @@ def lm8(all_morpho, sn, seconds):
   overallt0 = time.time()
   totallength=0
   finishing=0
+
+  #reset statistics and counter
+  emorpho_io.start_lm(all_morpho, sn, [0,1])
   
   while finishing < 1:
-      #lm_data_dir = "/home/vladimir/github/godot/bpi/listmode/python/multi/parallel/data/"
-      #prefix = "%s"%sn
-      #suffix = time.strftime("_lm8_%y%m%d_%H%M%S.csv")
-      #lm_data_file = lm_data_dir+prefix+suffix
-
-      lm_data_file = "/home/vladimir/github/godot/bpi/listmode/python/multi/parallel/data/%s%s"%(sn,time.strftime("_lm8_%y%m%d_%H%M%S.csv"))
+      lm_data_file = "/home/vladimir/GODOT/data/%s%s"%(sn,time.strftime("_lm8_%y%m%d_%H%M%S.csv"))
   
       #From lm3 we replaced "clear_statistics" with 0 instead of 1
       emorpho_io.start_lm(all_morpho, sn, [0,0])
@@ -97,12 +92,11 @@ def lm8(all_morpho, sn, seconds):
               tojoin = [lmstr,st,data]
               lmstr = '\n'.join(tojoin)
               length = length + lm_counts
-              #print 'length: ',length, 'lm_counts: ',lm_counts
   
-          countslasttime = lm_counts
-          first3lasttime = first3
+              countslasttime = lm_counts
+              first3lasttime = first3
   
-      print "length, filename: ", length, lm_data_file
+      #print "length, filename: ", length, lm_data_file
       t1=datetime.now()
       st1='\n%s %s %s %s %s %s %s\n' %(str(t1.year),str(t1.month),str(t1.day),str(t1.hour),str(t1.minute),str(t1.second),str(t1.microsecond))
       f=open(lm_data_file,'w')
@@ -112,5 +106,4 @@ def lm8(all_morpho, sn, seconds):
       totallength = totallength + length
   
   print time.strftime("%Y-%m-%d/%H:%M:%S", time.localtime())
-  #print "%s List mode done, total length: ",sn, totallength,"  ",totallength/seconds,"c/s"
-  print "%s @ %2.0f%% List mode done, total length: %f  %fc/s"%(sn, max_buffer_frac*100, totallength,totallength/seconds)
+  print "%s List mode done, total length: ",sn, totallength,"  ",totallength/seconds,"c/s"
