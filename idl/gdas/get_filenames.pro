@@ -1,4 +1,4 @@
-function get_filenames, date, timespan=timespan 
+function get_filenames, date, timespan=timespan, filter=filter 
 
 datadir = '/media/godot_/data/'
 
@@ -14,6 +14,11 @@ while (prevfiles eq !NULL or prevfiles eq '') and (dhour lt 8) do begin
 	dhour++
 endwhile
 
-return, [prevfiles, files]
+files = [prevfiles, files]
+
+if keyword_set(filter) then $ 
+	files = strfilter(files, filter)
+
+return, files
 
 end

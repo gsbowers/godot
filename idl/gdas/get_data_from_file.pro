@@ -1,4 +1,4 @@
-function get_data_from_file, filename, stopframe=stopframe, silent=silent, logfile=logfile
+function get_data_from_file, filename, stopframe=stopframe, hang=hang 
 
 ;DIAGNOSTIC
 if ~keyword_set(stopframe) then stopframe = -1
@@ -91,6 +91,8 @@ for frame=1,nframes-1 do begin
 	;t += hour*3600.0d + minute*60.d + double(second) + micro*1.d-6
 	t += gettime(timestamp)
 
+	if n_elements(t) ge 3 then begin
+
 	;check that time in frame is monotonic
 	dt = shift(t,-1)-t
 	dt = dt[0:-2] 
@@ -127,6 +129,8 @@ for frame=1,nframes-1 do begin
 		endif 
 	endif
 
+	endif
+
 	;record event data
 	buffer_size = a[1]*1l
 	events[count:count+buffer_size-1].energy = ret.energy
@@ -156,14 +160,18 @@ events = events[0:count-1]
 ;CHECK DATA (2)
 
 ;final check that overall time is monotonic
+if n_elements(events.time) ge 3 then begin
 dt = shift(events.time,-1)-events.time
 dt = dt[0:-2]
 bad = where(dt lt 0, nbad)
 if nbad gt 0 then begin
 	message, string(format='(%"filename %s: time not monotonic. stopping")', filename)
 endif
+endif
 
 data = {time:events.time, energy:events.energy, frame:events.frame, timestamps:timestamps, goodframes:goodframes, filename:filename, frameflags:frameflags[0:nframes-1]}
+
+if keyword_set(hang) then stop
 
 return, data
 
