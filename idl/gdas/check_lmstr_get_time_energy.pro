@@ -18,6 +18,7 @@ if keyword_set(prev_lmstr) then begin
 	if prev_buffer_size lt buffer_size then begin 
 		; sometimes lmstr is same as previous lmstr except that 
 		; first event is different: compare a and lasta starting at 5 
+    if n_elements(a) gt 5 and n_elements(preva) gt 5 then $
 		if array_equal(a[5:prev_buffer_size*3+1], preva[5:-1]) then begin
 			ret.flag = 1 ;continue
 			return, ret
@@ -63,6 +64,7 @@ t*=12.5d-9
 t -= t[w0]
 
 ;record time and energy
+tb = a[indgen(buffer_size)*3+4]*1l ;most sig. timing byte
 ret = {flag:ret.flag, time:t, ta:ta, tb:tb, energy:en, lmstr:lmstr}
 
 return, ret
