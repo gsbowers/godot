@@ -1,4 +1,5 @@
-function get_data_from_file, filename, stopframe=stopframe, hang=hang, logfile=logfile
+function get_data_from_file, filename$
+	, stopframe=stopframe, hang=hang, logfile=logfile
 	
 	;DIAGNOSTIC
 	if ~keyword_set(stopframe) then stopframe = -1
