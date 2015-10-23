@@ -1,6 +1,6 @@
 function get_time_from_ta_tb_t0file, ta, tb, t0file
 
-;calculate number of rollovers since instrumentation start
+;get time from t0file
 t0info = get_t0info_from_t0file(t0file)
 t0 = t0info.times[1]
 
@@ -14,8 +14,6 @@ for k=0, nskips-1 do $
 	
 t=ta*1.d + tb*65536.d
 t*=12.5d-9
-
-stop
 
 return, t + t0
 
